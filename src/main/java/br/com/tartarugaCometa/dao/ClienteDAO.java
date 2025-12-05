@@ -10,7 +10,15 @@ import br.com.tartarugaCometa.model.Cliente;
 public class ClienteDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO cliente (nomeRazao, documento, tpDocumento,id_endereco) VALUES (?,?,?,?)";
+        "INSERT INTO cliente (nomeRazao, documento, tpDocumento,data_cadastro,id_endereco) VALUES (?,?,?,?)";
+   // private static final String SELECT_SQL = 
+   // 		"SELECT * FROM cliente";
+   // private static final String SELECT_BY_ID_SQL = 
+   //         "SELECT id_cliente, nomeRazao, data_cadastro FROM empresa WHERE id_cliente = ?";
+   // private static final String UPDATE_SQL =
+   // 		"UPDATE empresa SET nomeRazao = ?, data_cadastro = ? WHERE id_cliente = ?";
+   // private static final String DELETE_SQL=
+   // 		"DELETE FROM empresa WHERE id_cliente = ?";
 
     public void salvarCliente(Cliente cliente) {
         try (Connection conn = ConnectionFactory.getConnection();

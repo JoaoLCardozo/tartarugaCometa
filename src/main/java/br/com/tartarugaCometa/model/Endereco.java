@@ -2,7 +2,7 @@ package br.com.tartarugaCometa.model;
 
 public class Endereco {
     
-    private String rua;
+    private String logradouro;
     private String numero;
     private String cep;
     private String bairro;
@@ -11,11 +11,11 @@ public class Endereco {
     private String uf;
     private int idEndereco;
     
-    public String getRua() {
-        return rua;
+    public String getLogradouro() {
+        return logradouro;
     }
-    public void setRua(String rua) {
-        this.rua = rua;
+    public void setLogradouro(String logradouro) {
+        this.logradouro = logradouro;
     }
     public String getNumero() {
         return numero;

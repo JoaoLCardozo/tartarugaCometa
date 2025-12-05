@@ -1,4 +1,4 @@
-package br.com.tartarugaCometa.dao;
+			package br.com.tartarugaCometa.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -18,7 +18,7 @@ public class EnderecoDAO {
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(INSERT_SQL)) {
-                ps.setString(1, endereco.getRua());
+                ps.setString(1, endereco.getLogradouro());
                 ps.setString(2, endereco.getNumero());
                 ps.setString(3, endereco.getCep());
                 ps.setString(4, endereco.getBairro());
