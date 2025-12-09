@@ -37,8 +37,8 @@ public class NovoProduto implements Acao{
 		
 		Mercadoria mercadoria = new Mercadoria();
 		mercadoria.setNome(nome);
-		mercadoria.setDocumento(documento);
-		mercadoria.setEndereco(endereco);
+		mercadoria.setPeso(peso);
+		mercadoria.setPreco(preco);
 		
 		ClienteDAO dao = new ClienteDAO();
 		dao.salvarCliente(cliente);
