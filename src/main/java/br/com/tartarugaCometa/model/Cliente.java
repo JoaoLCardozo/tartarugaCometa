@@ -1,10 +1,12 @@
 package br.com.tartarugaCometa.model;
 
 public class Cliente {
+	private int id;
     private String nomeRazao;
     private String documento;
     private String tpDocumento;
     private Endereco endereco;
+    
     
     
     public String getNomeRazao() {
@@ -31,4 +33,10 @@ public class Cliente {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 }

@@ -1,21 +1,13 @@
 package br.com.tartarugaCometa.acao;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-public class TesteConexao implements Acao{
+public class TesteConexao {
 
     public static void testar() throws ClassNotFoundException {
-    	
-    	public String executa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        String url = "jdbc:postgresql://localhost:5432/BancoGerenciador";
+        String url = "jdbc:postgresql://localhost:5432/TartarugaCometa";
         String user = "postgres";
         String password = "1234";
 
@@ -34,7 +26,5 @@ public class TesteConexao implements Acao{
                System.out.println("Could not connect");
                System.exit(1);
              }
-        return
     }
 }
-
