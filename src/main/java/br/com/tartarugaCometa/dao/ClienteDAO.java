@@ -13,15 +13,15 @@ import br.com.tartarugaCometa.model.Cliente;
 public class ClienteDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO cliente (nomeRazao, documento, tpDocumento,data_cadastro,id_endereco) VALUES (?,?,?,?,?)";
+        "INSERT INTO cliente (nomeRazao, documento, tpDocumento,id_endereco) VALUES (?,?,?,?)";
     private static final String SELECT_SQL = 
     		"SELECT * FROM cliente";
-   // private static final String SELECT_BY_ID_SQL = 
-   //         "SELECT id_cliente, nomeRazao, data_cadastro FROM empresa WHERE id_cliente = ?";
+    private static final String SELECT_BY_ID_SQL = 
+            "SELECT id_cliente, nomeRazao, tp_documento, documento FROM cliente WHERE id_cliente = ?";
     private static final String UPDATE_SQL =
-   		"UPDATE cliente SET nomeRazao = ?, data_cadastro = ? WHERE id_cliente = ?";
-   // private static final String DELETE_SQL=
-   // 		"DELETE FROM empresa WHERE id_cliente = ?";
+    		"UPDATE cliente SET nomeRazao = ?, tpDocumento = ?, documento = ? WHERE id_cliente = ?";
+    private static final String DELETE_SQL=
+   		"DELETE FROM cliente WHERE id_cliente = ?";
 
     public void salvarCliente(Cliente cliente) {
         try (Connection conn = ConnectionFactory.getConnection();
@@ -57,14 +57,35 @@ public class ClienteDAO {
         }
         return clientes;
     }
-    public int updateCliente(String novoNomeRazao, java.sql.Date novaDataCadastro, int idCliente, String novoTpDocumento) {
+    public Cliente buscaClientePeloId(int id) {
+        Cliente cliente = null;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
+            
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cliente = new Cliente();
+                    cliente.setId(rs.getInt("id_cliente"));
+                    cliente.setNomeRazao(rs.getString("nome_razao"));
+                    cliente.setTpDocumento("tp_documento");
+                    cliente.setDocumento("documento");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar cliente pelo ID: " + id, e);
+        }
+        return cliente;
+    }
+    public int updateCliente(Cliente cliente) {
     	int linhasAfetadas = 0;
     	try (Connection conn = ConnectionFactory.getConnection();
     	PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
-    		ps.setString(1, novoNomeRazao);
-    		ps.setDate(2, novaDataCadastro);
-    		ps.setInt(3, idCliente);
-    		ps.setString(4,novoTpDocumento);
+    		ps.setString(1, cliente.getNomeRazao());
+    		ps.setString(2, cliente.getTpDocumento());
+    		ps.setString(3, cliente.getDocumento());
+    		ps.setInt(4,cliente.getId());
     		
     		linhasAfetadas = ps.executeUpdate();
     	} catch (SQLException e) {
@@ -72,6 +93,26 @@ public class ClienteDAO {
     	}
     	return linhasAfetadas;
     }
+    
+    public int deletarCliente(int idCliente) { 
+        int linhasAfetadas = 0;
+        try (Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
+            ps.setInt(1, idCliente);
+            linhasAfetadas = ps.executeUpdate();
+
+            if (linhasAfetadas > 0) {
+                System.out.println("Cliente com ID " + idCliente + " deletado com sucesso.");
+              } else {
+                System.out.println("Nenhum cliente encontrado com o ID " + idCliente + " para deletar.");
+              }
+              
+              return linhasAfetadas;
+        } catch (SQLException e) {
+
+            throw new RuntimeException("Erro ao deletar cliente com ID " + idCliente, e);
+        }
+} 
     
     
     

@@ -7,12 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-public class NovoCadastroForm implements Acao{
+public class NovoClienteForm implements Acao{
 	
 	public String executa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
-		return "forward:formNovaEmpresa.jsp";
+		return "forward:formNovoCliente.jsp";
 	}
 
 }

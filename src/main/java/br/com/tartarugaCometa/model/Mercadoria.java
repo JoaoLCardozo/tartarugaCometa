@@ -7,7 +7,7 @@ public class Mercadoria {
     private double preco;
     private double volume;
     private int quantidade;
-    private int idProduto;
+    private int idMercadoria;
 
     public String getNome() {
         return nome;
@@ -39,10 +39,10 @@ public class Mercadoria {
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
     }
-    public int getIdProduto() {
-        return idProduto;
+    public int getIdMercadoria() {
+        return idMercadoria;
     }
-    public void setIdProduto(int idProduto) {
-        this.idProduto = idProduto;
+    public void setIdMercadoria(int idMercadoria) {
+        this.idMercadoria = idMercadoria;
     }    
 }
