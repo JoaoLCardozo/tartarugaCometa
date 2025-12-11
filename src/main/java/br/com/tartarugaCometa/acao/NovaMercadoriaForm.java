@@ -1,5 +1,5 @@
 package br.com.tartarugaCometa.acao;
 
-public class NovoProdutoForm {
+public class NovaMercadoriaForm {
 
 }

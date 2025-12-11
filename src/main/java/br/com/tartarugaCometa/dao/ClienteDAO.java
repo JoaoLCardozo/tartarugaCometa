@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,30 +14,37 @@ import br.com.tartarugaCometa.model.Cliente;
 public class ClienteDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO cliente (nomeRazao, documento, tpDocumento,id_endereco) VALUES (?,?,?,?)";
+        "INSERT INTO cliente (nome_razao, documento, tpDocumento) VALUES (?,?,?);";
     private static final String SELECT_SQL = 
-    		"SELECT * FROM cliente";
+    		"SELECT * FROM cliente;";
     private static final String SELECT_BY_ID_SQL = 
-            "SELECT id_cliente, nomeRazao, tp_documento, documento FROM cliente WHERE id_cliente = ?";
+            "SELECT id_cliente, nome_razao, tpDocumento, documento FROM cliente WHERE id_cliente = ?;";
     private static final String UPDATE_SQL =
-    		"UPDATE cliente SET nomeRazao = ?, tpDocumento = ?, documento = ? WHERE id_cliente = ?";
+    		"UPDATE cliente SET nome_razao = ?, tpDocumento = ?, documento = ? WHERE id_cliente = ?;";
     private static final String DELETE_SQL=
-   		"DELETE FROM cliente WHERE id_cliente = ?";
+   		"DELETE FROM cliente WHERE id_cliente = ?;";
 
-    public void salvarCliente(Cliente cliente) {
+    public int salvarCliente(Cliente cliente) {
+    	int idClienteGerado = 0;
         try (Connection conn = ConnectionFactory.getConnection();
         		 
-             PreparedStatement ps  = conn.prepareStatement(INSERT_SQL)) {
+             PreparedStatement ps  = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
         	
             ps.setString(1, cliente.getNomeRazao());
             ps.setString(2, cliente.getDocumento());
             ps.setString(3, cliente.getTpDocumento());
-            ps.setInt(4, cliente.getEndereco().getIdEndereco());
+            
             ps.executeUpdate();
-            System.out.println("Cliente salvo com sucesso.");
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    idClienteGerado = rs.getInt(1); 
+                    System.out.println("Cliente salvo com sucesso. ID Gerado: " + idClienteGerado);
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar cliente", e);
         }
+        return idClienteGerado;
     }
     
     public List<Cliente> selecionarTodos() {
@@ -48,9 +56,11 @@ public class ClienteDAO {
             while (rs.next()) {
                 Cliente cliente = new Cliente();
                 cliente.setId(rs.getInt("id_cliente"));
-                cliente.setNomeRazao("nome_razao");
-                cliente.setDocumento("documento");
-                cliente.setTpDocumento("tpDocumento");
+                cliente.setNomeRazao(rs.getString("nome_razao"));
+                cliente.setDocumento(rs.getString("documento"));
+                cliente.setTpDocumento(rs.getString("tpDocumento"));
+                
+                clientes.add(cliente);	
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar todos os clientes", e);
@@ -69,8 +79,8 @@ public class ClienteDAO {
                     cliente = new Cliente();
                     cliente.setId(rs.getInt("id_cliente"));
                     cliente.setNomeRazao(rs.getString("nome_razao"));
-                    cliente.setTpDocumento("tp_documento");
-                    cliente.setDocumento("documento");
+                    cliente.setTpDocumento(rs.getString("tpDocumento"));
+                    cliente.setDocumento(rs.getString("documento"));
                 }
             }
         } catch (SQLException e) {

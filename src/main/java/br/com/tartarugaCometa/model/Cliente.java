@@ -1,7 +1,5 @@
 package br.com.tartarugaCometa.model;
 
-import java.util.Date;
-
 public class Cliente {
 	private int id;
     private String nomeRazao;

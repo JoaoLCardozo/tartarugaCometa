@@ -14,7 +14,7 @@ import br.com.tartarugaCometa.model.Endereco;
 public class EnderecoDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO endereco (logradouro, numero, cep, bairro, cidade, complemento, estado_uf) VALUES (?,?,?,?,?,?,?)";
+        "INSERT INTO endereco (id_endereco,logradouro, numero, cep, bairro, cidade, complemento, estado_uf) VALUES (?,?,?,?,?,?,?,?)";
     
     private static final String SELECT_SQL = 
         "SELECT * FROM endereco";
@@ -29,27 +29,23 @@ public class EnderecoDAO {
         "DELETE FROM endereco WHERE id_endereco = ?";
 
     
-    public void salvarEndereco(Endereco endereco) {
+    public void salvarEndereco(Endereco endereco, int idCliente) {
         try (Connection conn = ConnectionFactory.getConnection();
              
-             PreparedStatement ps  = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps  = conn.prepareStatement(INSERT_SQL)) {
             
-            ps.setString(1, endereco.getLogradouro());
-            ps.setString(2, endereco.getNumero());
-            ps.setString(3, endereco.getCep());
-            ps.setString(4, endereco.getBairro());
-            ps.setString(5, endereco.getCidade());
-            ps.setString(6, endereco.getComplemento());
-            ps.setString(7, endereco.getUf()); 
+            ps.setInt(1, idCliente);
+            ps.setString(2, endereco.getLogradouro());
+            ps.setString(3, endereco.getNumero());
+            ps.setString(4, endereco.getCep());
+            ps.setString(5, endereco.getBairro());
+            ps.setString(6, endereco.getCidade());
+            ps.setString(7, endereco.getComplemento());
+            ps.setString(8, endereco.getUf()); 
 
             ps.executeUpdate();
             
             
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    endereco.setIdEndereco(rs.getInt(1));
-                }
-            }
             System.out.println("Endereço salvo com sucesso. ID: " + endereco.getIdEndereco());
             
         } catch (SQLException e) {
