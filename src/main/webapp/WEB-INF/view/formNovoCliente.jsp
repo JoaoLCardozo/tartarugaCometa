@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>Cadastro de Cliente</title>
     <style>
-        /* Apenas para melhor visualização dos blocos */
+
         fieldset { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
         legend { font-weight: bold; padding: 0 10px; }
         label { display: inline-block; width: 150px; margin-bottom: 5px; }
@@ -18,9 +18,12 @@
 </head>
 <body>
 
-    <h2>Cadastro de Novo Cliente e Endereço</h2>
+    <h2>Cadastro de Novo Cliente	</h2>
     
     <form action="${linkEntradaServlet}" method="post">
+    
+    <a href="javascript:history.back()">Voltar</a>
+    
 	
         <fieldset>
             <legend>Dados do Cliente</legend>
@@ -71,7 +74,7 @@
 
             <div class="row">
                 <label for="estadoUf">Estado (UF):</label> 
-                <input type="text" id="estadoUf" name="estadoUf" required>
+                <input type="text" id="estado_uf" name="estado_uf" required>
             </div>
 
             <div class="row">
@@ -88,7 +91,6 @@
 	</form>
     
     <br/>
-    <a href="javascript:history.back()">Voltar</a>
 
 </body>
 </html>	

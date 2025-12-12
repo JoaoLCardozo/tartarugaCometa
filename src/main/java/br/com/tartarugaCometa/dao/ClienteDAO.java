@@ -37,7 +37,8 @@ public class ClienteDAO {
             ps.executeUpdate();
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    idClienteGerado = rs.getInt(1); 
+                    idClienteGerado = rs.getInt(1);
+                    cliente.setId(idClienteGerado);
                     System.out.println("Cliente salvo com sucesso. ID Gerado: " + idClienteGerado);
                 }
             }

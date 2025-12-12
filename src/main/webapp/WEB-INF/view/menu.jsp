@@ -10,11 +10,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Java Standard Taglib</title>
+    <style>
+
+        fieldset { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; }
+        legend { font-weight: bold; padding: 0 10px; }
+        label { display: inline-block; width: 150px; margin-bottom: 5px; }
+        input[type="text"], input[type="number"] { width: 250px; padding: 5px; }
+        .row { margin-bottom: 10px; }
+    </style>
 </head>
 <body>
 
 	<h1>Menu:</h1> <br />
+	<div><a href= "/tartarugaCometa/entrada?acao=ListaClientes">Cliente</a></div>
 	
-	<a href= "/tartarugaCometa/entrada?acao=ListaClientes">Cliente</a>
+	<div><a href= "/tartarugaCometa/entrada?acao=ListaMercadoria">Mercadoria</a></div>
+	<a href= "/tartarugaCometa/entrada?acao=ListaEntrega">Entrega</a>
+
 </body>
 </html>

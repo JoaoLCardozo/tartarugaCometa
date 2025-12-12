@@ -15,10 +15,10 @@ import br.com.tartarugaCometa.model.Mercadoria;
 public class MercadoriaDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO mercadoria (logradouro, numero, cep, bairro, cidade, complemento, estado_uf) VALUES (?,?,?,?,?,?,?)";
+        "INSERT INTO mercadoria (nome, peso, preco, volume) VALUES (?,?,?,?)";
     
     private static final String SELECT_ALL_SQL = 
-        "SELECT * FROM endereco";
+        "SELECT * FROM mercadoria";
     
     private static final String SELECT_BY_ID_SQL = 
         "SELECT id_mercadoria, nome, peso, preco, volume FROM mercadoria WHERE id_mercadoria = ?";
@@ -70,12 +70,13 @@ public class MercadoriaDAO {
                 mercadoria.setNome(rs.getString("nome"));
                 mercadoria.setPeso(rs.getDouble("peso"));
                 mercadoria.setPreco(rs.getDouble("preco"));
+                mercadoria.setPreco(rs.getDouble("volume"));
                 
                 
                 mercadorias.add(mercadoria);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar todos os endereços", e);
+            throw new RuntimeException("Erro ao buscar todas as mercadorias", e);
         }
         return mercadorias;
     }
@@ -92,11 +93,11 @@ public class MercadoriaDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     mercadoria = new Mercadoria();
-                    mercadoria.setIdMercadoria(rs.getInt("id_endereco"));
-                    mercadoria.setNome(rs.getString("logradouro"));
-                    mercadoria.setPeso(rs.getDouble("numero"));
-                    mercadoria.setPreco(rs.getDouble("cep"));
-                    mercadoria.setVolume(rs.getDouble("bairro"));
+                    mercadoria.setIdMercadoria(rs.getInt("id_mercadoria"));
+                    mercadoria.setNome(rs.getString("nome"));
+                    mercadoria.setPeso(rs.getDouble("peso"));
+                    mercadoria.setPreco(rs.getDouble("preco"));
+                    mercadoria.setVolume(rs.getDouble("volume"));
                 }
             }
         } catch (SQLException e) {

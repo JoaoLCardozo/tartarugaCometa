@@ -14,13 +14,13 @@ import br.com.tartarugaCometa.model.Endereco;
 public class EnderecoDAO {
 
     private static final String INSERT_SQL =
-        "INSERT INTO endereco (id_endereco,logradouro, numero, cep, bairro, cidade, complemento, estado_uf) VALUES (?,?,?,?,?,?,?,?)";
+    		"INSERT INTO endereco (logradouro, numero, cep, bairro, cidade, complemento, estado_uf, id_cliente) VALUES (?,?,?,?,?,?,?,?)";
     
     private static final String SELECT_SQL = 
         "SELECT * FROM endereco";
     
     private static final String SELECT_BY_ID_SQL = 
-        "SELECT id_endereco, logradouro, numero, cep, bairro, cidade, complemento, estado_uf FROM endereco WHERE id_endereco = ?";
+        "SELECT id_endereco, logradouro, numero, cep, bairro, cidade, complemento, estado_uf FROM endereco WHERE id_cliente = ?";
             
     private static final String UPDATE_SQL =
         "UPDATE endereco SET logradouro = ?, numero = ?, cep = ?, bairro = ?, cidade = ?, complemento = ? , estado_uf = ?  WHERE id_endereco = ?";
@@ -34,14 +34,15 @@ public class EnderecoDAO {
              
              PreparedStatement ps  = conn.prepareStatement(INSERT_SQL)) {
             
-            ps.setInt(1, idCliente);
-            ps.setString(2, endereco.getLogradouro());
-            ps.setString(3, endereco.getNumero());
-            ps.setString(4, endereco.getCep());
-            ps.setString(5, endereco.getBairro());
-            ps.setString(6, endereco.getCidade());
-            ps.setString(7, endereco.getComplemento());
-            ps.setString(8, endereco.getUf()); 
+          
+            ps.setString(1, endereco.getLogradouro());
+            ps.setString(2, endereco.getNumero());
+            ps.setString(3, endereco.getCep());
+            ps.setString(4, endereco.getBairro());
+            ps.setString(5, endereco.getCidade());
+            ps.setString(6, endereco.getComplemento());
+            ps.setString(7, endereco.getUf()); 
+            ps.setInt(8, idCliente);
 
             ps.executeUpdate();
             

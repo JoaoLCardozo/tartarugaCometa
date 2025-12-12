@@ -29,6 +29,6 @@
 			</li>
 		</c:forEach>	
 	</ul>
-	<a href= "/tartarugaCometa/entrada?acao=NovoClienteForm">Novo Cliente</a>
+	<a href= "/tartarugaCometa/entrada?acao=NovoClienteForm">Cadastrar Cliente</a>
 </body>
 </html>
