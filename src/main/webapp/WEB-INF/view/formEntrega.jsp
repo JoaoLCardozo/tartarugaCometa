@@ -1,24 +1,34 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<c:url value="/entrada?acao=" var="linkEntradaServlet"/>
 
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Cadastro de Entrega</title>
-</head>
-<body>
-		
-	<form action= "${linkEntradaServlet}" method = "post">
-	
-		Nome: <input type= "text" name= "nome" />
-		Data Abertura: <input type= "text" name = "data" />
-		
-		<input type= "hidden" name= "acao" value= "NovaEmpresa">
-		
-		<input type= "submit" value="Cadastrar" />
-	
-	</form>
+<form action="entrada" method="post">
+  <input type="hidden" name="acao" value="NovaEntrega">
 
-</body>
-</html>
+  <h2>Cadastro de Entrega</h2>
+  <h3>Remetente</h3>
+  <select name="idRemetente" required>
+    <c:forEach var="c" items="${clientes}">
+      <option value="${c.id}">${c.nomeRazao} - ${c.documento}</option>
+    </c:forEach>
+  </select>
+
+  <h3>Destinatário</h3>
+  <select name="idDestinatario" required>
+    <c:forEach var="c" items="${clientes}">
+      <option value="${c.id}">${c.nomeRazao} - ${c.documento}</option>
+    </c:forEach>
+  </select>
+
+  <h3>Mercadoria</h3>
+  <select name="idMercadoria" required>
+    <c:forEach var="m" items="${mercadorias}">
+      <option value="${m.idMercadoria}">${m.nome}</option>
+    </c:forEach>
+  </select>
+
+  <h3>Quantidade:</h3>
+  <input type="number" name="quantidade" min="1" required>
+  
+ 
+
+  <button type="submit">Salvar</button>
+</form>

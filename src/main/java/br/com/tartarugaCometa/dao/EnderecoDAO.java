@@ -27,6 +27,9 @@ public class EnderecoDAO {
     
     private static final String DELETE_SQL =
         "DELETE FROM endereco WHERE id_endereco = ?";
+    
+    private static final String DELETE_BY_CLIENTE_SQL = 
+            "DELETE FROM endereco WHERE id_cliente = ?";
 
     
     public void salvarEndereco(Endereco endereco, int idCliente) {
@@ -153,5 +156,19 @@ public class EnderecoDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar endereço com ID " + idEndereco, e);
         }
-    } 
+    }
+    public void deletarPorCliente(int idCliente) {
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(DELETE_BY_CLIENTE_SQL)) {
+            
+            ps.setInt(1, idCliente);
+            ps.executeUpdate();
+            
+            System.out.println("Endereços do cliente " + idCliente + " deletados.");
+            
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar endereços do cliente ID " + idCliente, e);
+        }
+    }
+ 
 }

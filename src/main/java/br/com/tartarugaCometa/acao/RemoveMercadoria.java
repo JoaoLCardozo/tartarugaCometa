@@ -6,32 +6,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import br.com.tartarugaCometa.dao.ClienteDAO;
-import br.com.tartarugaCometa.dao.EnderecoDAO; 
 
-public class RemoveCliente implements Acao {
+import br.com.tartarugaCometa.dao.MercadoriaDAO; 
+
+public class RemoveMercadoria implements Acao {
     
     public String executa(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        System.out.println("Acao removendo cliente");
+        System.out.println("Acao removendo mercadoria");
         
         String paramId = request.getParameter("id");
         Integer id = Integer.valueOf(paramId);
         
-        System.out.println(id);
+        System.out.println("ID recebido: " + id);
        
         
-        EnderecoDAO enderecoDao = new EnderecoDAO();
-        
-        
-        enderecoDao.deletarPorCliente(id); 
+        MercadoriaDAO mercadoriaDao = new MercadoriaDAO();
+        mercadoriaDao.deletarMercadoria(id); 
         
 
-        
-        ClienteDAO dao = new ClienteDAO();
-        dao.deletarCliente(id);
-        
-        return "redirect:entrada?acao=ListaClientes";
+        return "redirect:entrada?acao=ListaMercadoria";
     }
 
 }

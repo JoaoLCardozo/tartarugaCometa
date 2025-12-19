@@ -10,53 +10,55 @@ import java.util.List;
 
 import br.com.tartarugaCometa.db.ConnectionFactory;
 import br.com.tartarugaCometa.model.Entrega;
-import br.com.tartarugaCometa.model.Mercadoria;
+
 
 public class EntregaDAO {
 
-    private static final String INSERT_SQL =
-        "INSERT INTO mercadoria (nome, peso, preco, volume) VALUES (?,?,?,?)";
     
-    private static final String SELECT_ALL_SQL = 
-        "SELECT * FROM mercadoria";
+	private static final String INSERT_SQL =
+		    "INSERT INTO entrega (id_remetente, id_destinatario, id_mercadoria, quantidade, status) VALUES (?,?,?,?,?)";
     
-    private static final String SELECT_BY_ID_SQL = 
-        "SELECT id_mercadoria, nome, peso, preco, volume FROM mercadoria WHERE id_mercadoria = ?";
+	private static final String SELECT_ALL_SQL =
+		    "SELECT id_entrega, id_remetente, id_destinatario, id_mercadoria, quantidade, status FROM entrega";
+    
+	private static final String SELECT_BY_ID_SQL =
+		    "SELECT id_entrega, id_remetente, id_destinatario, id_mercadoria, quantidade, status " +
+		    "FROM entrega WHERE id_entrega = ?";
             
-    private static final String UPDATE_SQL =
-        "UPDATE mercadoria SET nome = ?, peso = ?, preco = ?, volume = ?  WHERE id_mercadoria = ?";
+	private static final String UPDATE_SQL =
+		    "UPDATE entrega SET id_remetente=?, id_destinatario=?, id_mercadoria=?, quantidade=?, status=? WHERE id_entrega=?";
     
     private static final String DELETE_SQL =
-        "DELETE FROM mercadoria WHERE id_endereco = ?";
+        "DELETE FROM entrega WHERE id_entrega = ?";
 
     
-    public void salvarMercadoria(Mercadoria mercadoria) {
+    public void salvarEntrega(Entrega entrega) {
         try (Connection conn = ConnectionFactory.getConnection();
-             
-             PreparedStatement ps  = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement ps = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             
-            ps.setString(1, mercadoria.getNome());
-            ps.setDouble(2, mercadoria.getPeso());
-            ps.setDouble(3, mercadoria.getPreco());
-            ps.setDouble(4, mercadoria.getVolume());
+            
+        	ps.setInt(1, entrega.getRemetente().getId());
+        	ps.setInt(2, entrega.getDestinatario().getId());
+        	ps.setInt(3, entrega.getMercadoria().getIdMercadoria());
+        	ps.setInt(4, entrega.getQuantidade());
+        	ps.setString(5, entrega.getStatus());
 
             ps.executeUpdate();
             
-            
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
-                    mercadoria.setIdMercadoria(rs.getInt(1));
+                    entrega.setIdEntrega(rs.getInt(1));
                 }
             }
-            System.out.println("Mercadoria salva com sucesso. ID: " + mercadoria.getIdMercadoria());
+            System.out.println("Entrega salva com sucesso. ID: " + entrega.getIdEntrega());
             
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao salvar mercadoria", e);
+            throw new RuntimeException("Erro ao salvar entrega", e);
         }
     }
     
     
-    public List<Entrega> selecionarTodos() {
+    public List<Entrega> selecionarTodas() {
         List<Entrega> entregas = new ArrayList<>();
         
         try (Connection conn = ConnectionFactory.getConnection();
@@ -66,24 +68,27 @@ public class EntregaDAO {
             while (rs.next()) {
                 Entrega entrega = new Entrega();
                 
-                entrega.setIdEntrega(rs.getInt("id_mercadoria"));
-                entrega.setNome(rs.getString("nome"));
-                entrega.setPeso(rs.getDouble("peso"));
-                entrega.setPreco(rs.getDouble("preco"));
-                entrega.setPreco(rs.getDouble("volume"));
+                entrega.setIdEntrega(rs.getInt("id_entrega"));
                 
+                entrega.getRemetente().setId(rs.getInt("id_remetente"));
+                entrega.getDestinatario().setId(rs.getInt("id_destinatario"));
+                
+                entrega.getMercadoria().setIdMercadoria(rs.getInt("id_mercadoria"));
+                entrega.setQuantidade(rs.getInt("quantidade"));
+                entrega.setStatus(rs.getString("status"));
+
                 
                 entregas.add(entrega);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar todas as mercadorias", e);
+            throw new RuntimeException("Erro ao buscar todas as entregas", e);
         }
-        return mercadorias;
+        return entregas;
     }
 
     
-    public Mercadoria buscaMercadoriaPeloId(int id) {
-        Mercadoria mercadoria = null;
+    public Entrega buscaEntregaPeloId(int id) {
+        Entrega entrega = null;
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(SELECT_BY_ID_SQL)) {
@@ -92,58 +97,64 @@ public class EntregaDAO {
             
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    mercadoria = new Mercadoria();
-                    mercadoria.setIdMercadoria(rs.getInt("id_mercadoria"));
-                    mercadoria.setNome(rs.getString("nome"));
-                    mercadoria.setPeso(rs.getDouble("peso"));
-                    mercadoria.setPreco(rs.getDouble("preco"));
-                    mercadoria.setVolume(rs.getDouble("volume"));
+                    entrega = new Entrega();
+                    entrega.setIdEntrega(rs.getInt("id_entrega"));
+                    
+                    entrega.getRemetente().setId(rs.getInt("id_remetente"));
+                    entrega.getDestinatario().setId(rs.getInt("id_destinatario"));
+                    entrega.getMercadoria().setIdMercadoria(rs.getInt("id_mercadoria"));
+                    
+                    entrega.setQuantidade(rs.getInt("quantidade"));
+                    entrega.setStatus(rs.getString("status"));
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar entrega pelo ID: " + id, e);
         }
-        return mercadoria;
+        return entrega;
     }
 
-    public int updateMercadoria(Mercadoria mercadoria) {
+    public int updateEntrega(Entrega entrega) {
         int linhasAfetadas = 0;
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
             
-            ps.setString(1, mercadoria.getNome());
-            ps.setDouble(2, mercadoria.getPeso());
-            ps.setDouble(3, mercadoria.getPreco());
-            ps.setDouble(4, mercadoria.getVolume());
+        	ps.setInt(1, entrega.getRemetente().getId());
+        	ps.setInt(2, entrega.getDestinatario().getId());
+        	ps.setInt(3, entrega.getMercadoria().getIdMercadoria());
+        	ps.setInt(4, entrega.getQuantidade());
+        	ps.setString(5, entrega.getStatus());
+        	ps.setInt(6, entrega.getIdEntrega());
 
-            
+
             linhasAfetadas = ps.executeUpdate();
             
         } catch (SQLException e) {
-            System.err.println("Erro ao atualizar a Mercadoria: " + e.getMessage());
+            System.err.println("Erro ao atualizar a Entrega: " + e.getMessage());
+            
         }
         return linhasAfetadas;
     }
     
  
-    public int deletarMercadoria(int idMercadoria) { 
+    public int deletarEntrega(int idEntrega) { 
         int linhasAfetadas = 0;
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(DELETE_SQL)) {
             
-            ps.setInt(1, idMercadoria);
+            ps.setInt(1, idEntrega);
             linhasAfetadas = ps.executeUpdate();
 
             if (linhasAfetadas > 0) {
-                System.out.println("Mercadoria com ID " + idMercadoria + " deletado com sucesso.");
+                System.out.println("Entrega com ID " + idEntrega + " deletada com sucesso.");
             } else {
-                System.out.println("Nenhuma mercadoria encontrada com o ID " + idMercadoria + " para deletar.");
+                System.out.println("Nenhuma entrega encontrada com o ID " + idEntrega + " para deletar.");
             }
               
             return linhasAfetadas;
             
         } catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar mercadoria com ID " + idMercadoria, e);
+            throw new RuntimeException("Erro ao deletar entrega com ID " + idEntrega, e);
         }
     } 
 }

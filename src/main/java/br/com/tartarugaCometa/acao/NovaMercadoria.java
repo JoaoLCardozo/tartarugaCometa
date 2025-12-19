@@ -39,7 +39,7 @@ public class NovaMercadoria implements Acao{
 		
 		request.setAttribute("mercadoria", mercadoria.getNome());
 		
-		return "redirect:entrada?acao=ListaEmpresas";
+		return "redirect:entrada?acao=ListaMercadoria";
 	}
 
 }

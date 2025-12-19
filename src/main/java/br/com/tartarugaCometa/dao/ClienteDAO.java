@@ -10,6 +10,7 @@ import java.util.List;
 
 import br.com.tartarugaCometa.db.ConnectionFactory;
 import br.com.tartarugaCometa.model.Cliente;
+import br.com.tartarugaCometa.model.Endereco;
 
 public class ClienteDAO {
 
@@ -17,8 +18,11 @@ public class ClienteDAO {
         "INSERT INTO cliente (nome_razao, documento, tpDocumento) VALUES (?,?,?);";
     private static final String SELECT_SQL = 
     		"SELECT * FROM cliente;";
-    private static final String SELECT_BY_ID_SQL = 
-            "SELECT id_cliente, nome_razao, tpDocumento, documento FROM cliente WHERE id_cliente = ?;";
+    private static final String SELECT_BY_ID_SQL =
+    	    "SELECT c.*, e.* FROM cliente c " +
+    	    "LEFT JOIN endereco e ON c.id_cliente = e.id_cliente " +
+    	    "WHERE c.id_cliente = ?";
+
     private static final String UPDATE_SQL =
     		"UPDATE cliente SET nome_razao = ?, tpDocumento = ?, documento = ? WHERE id_cliente = ?;";
     private static final String DELETE_SQL=
@@ -77,11 +81,26 @@ public class ClienteDAO {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
+                	
                     cliente = new Cliente();
                     cliente.setId(rs.getInt("id_cliente"));
                     cliente.setNomeRazao(rs.getString("nome_razao"));
                     cliente.setTpDocumento(rs.getString("tpDocumento"));
                     cliente.setDocumento(rs.getString("documento"));
+
+                    int idEndereco = rs.getInt("id_endereco");
+                    if (!rs.wasNull()) {
+                        Endereco endereco = new Endereco();
+                        endereco.setIdEndereco(idEndereco);
+                        endereco.setLogradouro(rs.getString("logradouro"));
+                        endereco.setNumero(rs.getString("numero"));
+                        endereco.setCep(rs.getString("cep"));
+                        endereco.setBairro(rs.getString("bairro"));
+                        endereco.setCidade(rs.getString("cidade"));
+                        endereco.setUf(rs.getString("estado_uf"));
+                        endereco.setComplemento(rs.getString("complemento"));
+                        cliente.setEndereco(endereco);
+                    }
                 }
             }
         } catch (SQLException e) {

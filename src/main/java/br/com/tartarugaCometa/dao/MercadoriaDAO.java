@@ -27,7 +27,7 @@ public class MercadoriaDAO {
         "UPDATE mercadoria SET nome = ?, peso = ?, preco = ?, volume = ?  WHERE id_mercadoria = ?";
     
     private static final String DELETE_SQL =
-        "DELETE FROM mercadoria WHERE id_endereco = ?";
+        "DELETE FROM mercadoria WHERE id_mercadoria = ?";
 
     
     public void salvarMercadoria(Mercadoria mercadoria) {
@@ -70,7 +70,7 @@ public class MercadoriaDAO {
                 mercadoria.setNome(rs.getString("nome"));
                 mercadoria.setPeso(rs.getDouble("peso"));
                 mercadoria.setPreco(rs.getDouble("preco"));
-                mercadoria.setPreco(rs.getDouble("volume"));
+                mercadoria.setVolume(rs.getDouble("volume"));
                 
                 
                 mercadorias.add(mercadoria);
@@ -115,6 +115,7 @@ public class MercadoriaDAO {
             ps.setDouble(2, mercadoria.getPeso());
             ps.setDouble(3, mercadoria.getPreco());
             ps.setDouble(4, mercadoria.getVolume());
+            ps.setInt(5, mercadoria.getIdMercadoria());
 
             
             linhasAfetadas = ps.executeUpdate();
